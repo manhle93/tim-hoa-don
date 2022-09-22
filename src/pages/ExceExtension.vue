@@ -13,9 +13,11 @@
             <button class="ml-3 px-4 bg-primary-normal text-white hover:bg-primary-light" @click="timHoaDon">Tìm hóa
                 đơn</button>
         </div>
-
-        <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 10px; ">
-            <div v-for="(item, index) in ketQua" :key="index" style="width: 300px;">
+        <div style="margin-top: 50px;">
+            <b>Kết quả</b>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 10px; " v-if="ketQua && ketQua.length > 0">
+            <div v-for="(item, index) in ketQua" :key="index" style="width: 300px;" >
                 <table style="width: 100%">
                     <tr>
                         <th>Số Hóa đơn</th>
@@ -28,8 +30,9 @@
                 </table>
             </div>
         </div>
+        <div v-else style="margin-top: 10px">Không có kết quả</div>
         <div style="margin-top: 50px;">
-            <b>Kết quả</b>
+            <b>Nội dung File</b>
         </div>
         <div style="display: flex; justify-content: center; margin-top: 10px">
             <table>
