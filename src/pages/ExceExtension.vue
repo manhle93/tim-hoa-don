@@ -16,8 +16,9 @@
         <div style="margin-top: 50px;">
             <b>Kết quả</b>
         </div>
-        <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 10px; " v-if="ketQua && ketQua.length > 0">
-            <div v-for="(item, index) in ketQua" :key="index" style="width: 300px;" >
+        <div style="display: flex; flex-wrap: wrap; margin-top: 10px; " v-if="ketQua && ketQua.length > 0">
+            <div v-for="(item, index) in ketQua" :key="index" style="width: 300px; border: 1px solid #2471A3;"
+                class="mt-4 mr-4 ml-4 mb-3">
                 <table style="width: 100%">
                     <tr>
                         <th>Số Hóa đơn</th>
@@ -25,9 +26,11 @@
                     </tr>
                     <tr v-for="(it, id) in item" :key="id">
                         <td>{{it.soHd}}</td>
-                        <td>{{it.tien}}</td>
+                        <td>{{Number(it.tien).toLocaleString('de-DE')}}</td>
                     </tr>
                 </table>
+                <br />
+                <b>Tổng tiền: {{Number(tongTienShowItem(item)).toLocaleString('de-DE')}}</b>
             </div>
         </div>
         <div v-else style="margin-top: 10px">Không có kết quả</div>
@@ -42,7 +45,7 @@
                 </tr>
                 <tr v-for="(item, index) in tableData" :key="index">
                     <td>{{item.soHd}}</td>
-                    <td>{{item.tien}}</td>
+                    <td>{{Number(item.tien).toLocaleString('de-DE')}}</td>
                 </tr>
             </table>
         </div>
@@ -86,17 +89,21 @@ export default {
 
         timHoaDon() {
             this.ketQua = []
-            const lisData = this.originData.filter(el => Number(el.tien) < Number(this.tongTien) + Number(this.saiLech))
+            const lisData = this.originData
             const countData = lisData.length
             for (let i = 0; i < countData - 1; i++) {
                 let arrayTong = [lisData[i]]
-                for (let j = i + 1; j < countData; j++) {
-                    let check = this.tinhTong([...arrayTong, lisData[j]])
-                    if (check == 'NEXT') {
-                        arrayTong = [...arrayTong, lisData[j]]
-                    }
+                let check1 = this.tinhTong(arrayTong)
+                if (check1 == 'NEXT') {
+                    for (let j = i + 1; j < countData; j++) {
+                        let check = this.tinhTong([...arrayTong, lisData[j]])
+                        if (check == 'NEXT') {
+                            arrayTong = [...arrayTong, lisData[j]]
+                        }
 
+                    }
                 }
+
             }
         },
         tinhTong(array) {
@@ -111,11 +118,15 @@ export default {
                 this.ketQua.push(array)
                 return 'REJECT'
             }
+        },
+        tongTienShowItem(array) {
+            const sum = array.reduce((partialSum, a) => partialSum + a.tien, 0);
+            return sum
         }
 
     },
     watch: {
-        tongTien: function(val){
+        tongTien: function (val) {
             this.ketQua = []
         },
     }
