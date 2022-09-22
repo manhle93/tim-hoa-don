@@ -4,11 +4,11 @@
         <div style="display: flex; justify-content: center; margin-top: 50px">
             <div style="margin-right: 30px">
                 <b style="margin-right: 6px">Tổng tiền</b>
-                <input v-model="tongTien" class="input-value" />
+                <input type="number" min="0" v-model="tongTien" class="input-value" />
             </div>
             <div>
                 <b style="margin-right: 6px">Sai lệch</b>
-                <input v-model="saiLech" class="input-value" />
+                <input type="number" min="0" v-model="saiLech" class="input-value" />
             </div>
             <button class="ml-3 px-4 bg-primary-normal text-white hover:bg-primary-light" @click="timHoaDon">Tìm hóa
                 đơn</button>
@@ -82,7 +82,7 @@ export default {
         },
 
         timHoaDon() {
-            console.log(this.saiLech, this.tongTien)
+            this.ketQua = []
             const lisData = this.originData.filter(el => Number(el.tien) < Number(this.tongTien) + Number(this.saiLech))
             const countData = lisData.length
             for (let i = 0; i < countData - 1; i++) {
@@ -104,7 +104,7 @@ export default {
             else if (sum < (Number(this.tongTien) - Number(this.saiLech))) {
                 return 'NEXT'
             }
-            else if (sum <= (Number(this.tongTien) + Number(this.saiLech)) && sum >= (Number(this.tongTien) - Number(this.saiLech))) {
+            else if ((sum <= (Number(this.tongTien) + Number(this.saiLech))) && (sum >= (Number(this.tongTien) - Number(this.saiLech)))) {
                 this.ketQua.push(array)
                 return 'REJECT'
             }
@@ -115,9 +115,6 @@ export default {
         tongTien: function(val){
             this.ketQua = []
         },
-        saiLech: function(val){
-            this.ketQua = []
-        }
     }
 }
 </script>
